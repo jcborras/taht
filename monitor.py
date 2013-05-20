@@ -6,7 +6,7 @@ from unittest import TestCase, main
 
 from requests import ConnectionError, get
 
-from config import ToMonitor
+from config import to_monitor
 
 car = lambda x: x[0]
 
@@ -47,43 +47,42 @@ class TestDrive(TestCase):
         pass
 
     def test_hs(self):
-        self.assertEqual(len([ i for i in ToMonitor if i.name=='HS']), 1)
+        self.assertEqual(len([ i for i in to_monitor if i.name=='HS']), 1)
 
     def test_hs_check(self):
-        resource = car(filter(lambda i: i.name=='HS', ToMonitor))
+        resource = car(filter(lambda i: i.name=='HS', to_monitor))
         sleep(resource.polling_interval())
         self.assertTrue(resource.check(get(resource.url)))
 
     def test_hs_timed(self):
-        resource = car([ i for i in ToMonitor if i.name=='HS'])
+        resource = car([ i for i in to_monitor if i.name=='HS'])
         sleep(resource.polling_interval())
         a,b = timed_get(resource.url)
         self.assertTrue(resource.check(a) and b>0) 
 
     def test_hs_check(self):
-        resource = car([ i for i in ToMonitor if i.name=='HS'])
+        resource = car([ i for i in to_monitor if i.name=='HS'])
         sleep(resource.polling_interval())
         self.assertTrue(resource.check(get(resource.url)))
 
     def test_missing_resource(self):
-        resource = car(filter(lambda i: i.name=='Missing Resource', ToMonitor))
+        resource = car(filter(lambda i: i.name=='Missing Resource', to_monitor))
         self.assertRaises(ConnectionError, get, resource.url)
 
     def test_harnessed_smooth(self):
-        resource = car(filter(lambda i: i.name=='HS', ToMonitor))
+        resource = car(filter(lambda i: i.name=='HS', to_monitor))
         harness, op_return, timing_info = harnessed_get(resource.url)
         self.assertTrue(harness['status']=='OK' and resource.check(op_return))
 
     def test_harnessed_bumpy(self):
-        resource = car(filter(lambda i: i.name=='Missing Resource', ToMonitor))
+        resource = car(filter(lambda i: i.name=='Missing Resource', to_monitor))
         harness, op_return, timing_info = harnessed_get(resource.url)
         self.assertTrue(harness['status']=='Error' and issubclass(harness['stuff'].__class__, Exception))
 
     def test_facebook(self):
-        resource = car(filter(lambda i: i.name=='Facebook', ToMonitor))
+        resource = car(filter(lambda i: i.name=='Facebook', to_monitor))
         harness, op_return, timing_info = harnessed_get(resource.url)
         self.assertTrue(harness['status']=='OK' and resource.check(op_return))
-
 
  
 if __name__ == '__main__':
