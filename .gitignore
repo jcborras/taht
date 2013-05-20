@@ -38,5 +38,6 @@ nosetests.xml
 TODO
 TODO~
 *.py~
+templates/*~
 
 
