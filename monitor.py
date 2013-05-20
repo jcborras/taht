@@ -10,34 +10,35 @@ from config import ToMonitor
 
 car = lambda x: x[0]
 
-def harnessed(method):
-    def f(*args, **kw):
-        try:
-            result = method(*args, **kw)
-            return  {'status':'OK', 'stuff':None}, result
-        except Exception as e:
-            return {'status':'Error', 'stuff':e}, None
-        #print '%r (%r, %r) %2.2f sec' % (method.__name__, args, kw, te-ts)
-    return f
-
-@harnessed
-def harnessed_get(url):
-    return get(url)
-
 ## Credit where is due:
 ## http://www.andreas-jung.com/contents/a-python-decorator-for-measuring-the-execution-time-of-methods
 def timed(method):
-    def timing_func(*args, **kw):
+    def g(*args, **kw):
         ts = time()
         result = method(*args, **kw)
         te = time()
         #print '%r (%r, %r) %2.2f sec' % (method.__name__, args, kw, te-ts)
         return result, te-ts 
-    return timing_func
+    return g
 
 @timed
 def timed_get(url):
     return get(url)
+
+def harnessed(method):
+    def f(*args, **kw):
+        try:
+            result, timing = method(*args, **kw)
+            return  {'status':'OK', 'stuff':None}, result, timing
+        except Exception as e:
+            return {'status':'Error', 'stuff':e}, None, None ## Ugly. Not a lot, but ugly nevertheless
+        #print '%r (%r, %r) %2.2f sec' % (method.__name__, args, kw, te-ts)
+    return f
+
+@harnessed
+def harnessed_get(url):
+    return timed_get(url)
+
 
     
 class TestDrive(TestCase):
@@ -72,13 +73,13 @@ class TestDrive(TestCase):
 
     def test_harnessed_smooth(self):
         resource = car(filter(lambda i: i.name=='HS', ToMonitor))
-        a,b = harnessed_get(resource.url)
-        self.assertTrue(a['status']=='OK' and resource.check(b))
+        harness, op_return, timing_info = harnessed_get(resource.url)
+        self.assertTrue(harness['status']=='OK' and resource.check(op_return))
 
     def test_harnessed_bumpy(self):
         resource = car(filter(lambda i: i.name=='Missing Resource', ToMonitor))
-        a,b = harnessed_get(resource.url)
-        self.assertTrue(a['status']=='Error' and issubclass(a['stuff'].__class__, Exception))
+        harness, op_return, timing_info = harnessed_get(resource.url)
+        self.assertTrue(harness['status']=='Error' and issubclass(harness['stuff'].__class__, Exception))
 
 
  
