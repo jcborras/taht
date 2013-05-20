@@ -1,12 +1,13 @@
-#!/usr/bin/env
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from collections import namedtuple
 from unittest import TestCase, main
+from random import randint
 
-Resource = namedtuple('Resource', ['name', 'url', 'poll','check'])
+Resource = namedtuple('Resource', ['name', 'url', 'polling_interval','check'])
 
-hs = Resource('HS', 'http://www.hs.fi', lambda: randint(10), lambda x: x.status==200)
+hs = Resource('HS', 'http://www.hs.fi', lambda: randint(0,0), lambda x: x.status_code==200)
 
 ToMonitor = [hs]
 
