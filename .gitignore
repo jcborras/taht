@@ -1,6 +1,3 @@
-TODO
-TODO~
-
 *.py[cod]
 
 # C extensions
@@ -36,3 +33,10 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# Things jcb thinks are not appropriate
+TODO
+TODO~
+*.py~
+
+
