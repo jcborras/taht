@@ -39,8 +39,6 @@ def harnessed(method):
 def harnessed_get(url):
     return timed_get(url)
 
-
-    
 class TestDrive(TestCase):
     def setUp(self):
         pass
@@ -80,6 +78,11 @@ class TestDrive(TestCase):
         resource = car(filter(lambda i: i.name=='Missing Resource', ToMonitor))
         harness, op_return, timing_info = harnessed_get(resource.url)
         self.assertTrue(harness['status']=='Error' and issubclass(harness['stuff'].__class__, Exception))
+
+    def test_facebook(self):
+        resource = car(filter(lambda i: i.name=='Facebook', ToMonitor))
+        harness, op_return, timing_info = harnessed_get(resource.url)
+        self.assertTrue(harness['status']=='OK' and resource.check(op_return))
 
 
  
