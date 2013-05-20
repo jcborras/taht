@@ -4,7 +4,8 @@
 __author__ = 'jcb'
 
 from logging import basicConfig, DEBUG
-from random import sample
+from random import sample, randint
+from time import sleep
 
 from flask import abort, render_template, Flask
 
@@ -26,6 +27,7 @@ def random_content():
 
 @app.route(ROOT_URL, methods=['GET'])
 def frontpage():
+    sleep(randint(0,5))
     sc = sample(HTTP_STATUS_CODES,1)[0]
     if sc==200:
         return render_template("index.html", content=random_content())

@@ -51,18 +51,15 @@ class TestDrive(TestCase):
 
     def test_hs_check(self):
         resource = car(filter(lambda i: i.name=='HS', to_monitor))
-        sleep(resource.polling_interval())
         self.assertTrue(resource.check(get(resource.url)))
 
     def test_hs_timed(self):
         resource = car([ i for i in to_monitor if i.name=='HS'])
-        sleep(resource.polling_interval())
         a,b = timed_get(resource.url)
         self.assertTrue(resource.check(a) and b>0) 
 
     def test_hs_check(self):
         resource = car([ i for i in to_monitor if i.name=='HS'])
-        sleep(resource.polling_interval())
         self.assertTrue(resource.check(get(resource.url)))
 
     def test_missing_resource(self):
