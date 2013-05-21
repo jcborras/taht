@@ -24,7 +24,7 @@ fb = Resource('Facebook', 'http://www.facebook.com',
               check=lambda x:'form id="login_form"' in x.text)
 
 rogueserver = Resource('RogueServer', 'http://localhost:5000',
-                       polling_interval=lambda: randint(0,0),
+                       polling_interval=lambda: randint(1,2),
                        check=lambda x: 'Expected' in x.text)
 
 to_monitor = [rogueserver, hs,  missing_resource(), fb,  missing_resource(),

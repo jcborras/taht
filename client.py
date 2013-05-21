@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from datetime import datetime
-# Importing multiprocessing is an overkill maybe but I don't like the GIL anyway
-from multiprocessing import Lock, Process, Pool
+from threading import Lock, Thread
 from unittest import TestCase, main
 from time import sleep
 
@@ -40,7 +39,6 @@ def f(x):
         logger('%s %s "%s" (%s) [Timing: %.2f]' % (datetime.now(), req.status_code, x.name, x.url, timing_info))
 
 
-l = [ Process(target=f, args=(to_monitor[i],)) for i in range(len(to_monitor)) ]
+l = [ Thread(target=f, args=(to_monitor[i],)) for i in range(len(to_monitor)) ]
 tmp = [ i.start() for i in l]
-tmp = [ i.join() for i in l]
 
