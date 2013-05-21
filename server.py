@@ -15,7 +15,7 @@ APP_HOSTNAME = 'localhost'
 ROOT_URL='/'
 HTTP_STATUS_CODES = [200,400,200,404,200,500,200,501]
 
-app = Flask('RogueServer')
+app = Flask(__name__)
 formatstr = "%(asctime)s %(levelname)s %(message)s"
 basicConfig(format=formatstr, level=DEBUG)
 app.logger.setLevel(DEBUG)
