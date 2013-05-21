@@ -24,9 +24,13 @@ fb = Resource('Facebook', 'http://www.facebook.com',
               check=lambda x:'form id="login_form"' in x.text)
 
 rogueserver = Resource('RogueServer', 'http://localhost:5000',
+                       polling_interval=lambda: randint(100,200),
+                       check=lambda x: 'Expected' in x.text)
+
+rogueeham = Resource('RogueEHAM', 'http://eham.xerosen.net:8624',
                        polling_interval=lambda: randint(1,2),
                        check=lambda x: 'Expected' in x.text)
 
 to_monitor = [rogueserver, hs,  missing_resource(), fb,  missing_resource(),
-              missing_resource(), rogueserver, rogueserver]
+              missing_resource(), rogueeham, rogueeham, rogueeham]
 
